@@ -28,9 +28,22 @@ def insert(): # burada kaldık
     else:
         print("Kayıt eklenemedi.")
 
+def fetch_data():
+    mycursor.execute("SELECT name, eski_fiyat, yeni_fiyat FROM products")
+    data = mycursor.fetchall()
+    size = listbox.size()
+    if size == 0:
+        for row in data:
+            listbox.insert(END, f"{row[0]} - {row[1]} - {row[2]}")
+    elif len(data) > size:
+        listbox.delete(0, END)
+        for row in data:
+            listbox.insert(END, f"{row[0]} - {row[1]} - {row[2]}")
+    else:
+        pass
 
 root = Tk(screenName=None, baseName=None, className="Tk", useTk=1)
-root.geometry("400x500")
+root.geometry("1000x500")
 
 Label(root, text='Ürün adı').grid(row=0, column=0, padx=10, pady=10)
 Label(root, text='Eski Fiyat').grid(row=1, column=0, padx=10, pady=10)
@@ -48,5 +61,10 @@ input3.grid(row=2, column=1, padx=10, pady=10)
 button1 = Button(root, text="Kaydet", width=20, command=insert)
 button1.grid(row=3, column=0, columnspan=2,pady=10)
 
+listbox = Listbox(root, width=50, height=15)
+listbox.grid(column=1 , pady=20)
+
+fetch_button = Button(root, text="Verileri Getir", command=fetch_data)
+fetch_button.grid(column=1)
 
 root.mainloop()
